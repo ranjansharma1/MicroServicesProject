@@ -54,24 +54,28 @@ public class UserServiceImpl implements UserService {
         User user=userRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("User with given Id is not found on server... " +id));
                
         //fetch rating of the above user from Rating Service
-        //http://localhost:8083/rating/user/30c8eb36-a948-4a52-ba96-e72a8d78118e
-        String url="http://localhost:8083/rating/user/"+user.getUserId();
+        String url="http://RATING-SERVICE/rating/user/"+user.getUserId();
+
+//        ArrayList<Rating> ratingForUser= restTemplate.getForObject(url, ArrayList.class);
         Rating[] ratingForUser= restTemplate.getForObject(url, Rating[].class);
 //        System.out.println("Object is:- "+ forObject);
         logger.info("{}", ratingForUser);
         
-        List<Rating> ratings=Arrays.stream(ratingForUser).toList();
-        
-        
-        
-        
-        List<Rating> ratingList=ratings.stream().map(rating->{
-        	String hotelUrl="http://localhost:8082/hotels/"+rating.getHotelId();
-        	ResponseEntity<Hotel> hotelForUser=restTemplate.getForEntity(hotelUrl, Hotel.class);
-        	Hotel hotel=hotelForUser.getBody();
-        	logger.info("response status code: {}"+hotelForUser.getStatusCodeValue());
+        //converting array to arraylist
+        List<Rating> ratings=Arrays.stream(ratingForUser).toList();      
+            
+        //iterating each list and calling hotel service and adding in each user rating
+        List<Rating> ratingList=ratings.stream().map(rating->{        	
+	    	//Hotel API call from rating 
+	    	String hotelUrl="http://HOTEL-SERVICE/hotels/"+rating.getHotelId();
+	    	ResponseEntity<Hotel> hotelForUser=restTemplate.getForEntity(hotelUrl, Hotel.class);
+	    	Hotel hotel=hotelForUser.getBody();
+	    	logger.info("response status code: {}"+hotelForUser.getStatusCodeValue());
         	
+        	//set the hotel to rating
         	rating.setHotel(hotel);
+        	
+        	//return rating with hotel details
         	return rating;
         }).collect(Collectors.toList());
         
