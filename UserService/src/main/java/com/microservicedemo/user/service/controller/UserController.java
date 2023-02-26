@@ -41,6 +41,9 @@ public class UserController {
     public ResponseEntity<User> getUserbyId(@PathVariable String userId){
         User user=userService.getUserById(userId);
         return ResponseEntity.status(HttpStatus.OK).body(user);
+        
+        
+        
 //        return new ResponseEntity<>(user,HttpStatus.OK);
     }
 
