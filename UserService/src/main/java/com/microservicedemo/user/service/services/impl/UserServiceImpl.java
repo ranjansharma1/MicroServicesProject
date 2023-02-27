@@ -5,6 +5,7 @@ import com.microservicedemo.user.service.entities.Rating;
 import com.microservicedemo.user.service.entities.User;
 import com.microservicedemo.user.service.exceptions.ResourceNotFoundException;
 import com.microservicedemo.user.service.external.services.HotelService;
+import com.microservicedemo.user.service.external.services.RatingService;
 import com.microservicedemo.user.service.repositories.UserRepository;
 import com.microservicedemo.user.service.services.UserService;
 
@@ -34,6 +35,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private HotelService hotelService;
     
+    @Autowired
+    private RatingService ratingService;
+    
     
     //It will trackthe log in console
     private Logger logger=LoggerFactory.getLogger(UserServiceImpl.class);
@@ -49,6 +53,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> getAllUser() {
         List<User> users=userRepo.findAll();
+        
+        List<User> usersWithRating=users.stream().map(user->{
+        	return getUserById(user.getUserId());
+        }).collect(Collectors.toList());
+        
+        
         return users;
     }
 
@@ -56,26 +66,13 @@ public class UserServiceImpl implements UserService {
     public User getUserById(String id) {
     	//get user from database with the help of user repository
         User user=userRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("User with given Id is not found on server... " +id));
-               
-        //fetch rating of the above user from Rating Service
-        String url="http://RATING-SERVICE/rating/user/"+user.getUserId();
-
-//        ArrayList<Rating> ratingForUser= restTemplate.getForObject(url, ArrayList.class);
-        Rating[] ratingForUser= restTemplate.getForObject(url, Rating[].class);
-//        System.out.println("Object is:- "+ forObject);
-        logger.info("{}", ratingForUser);
         
-        //converting array to arraylist
-        List<Rating> ratings=Arrays.stream(ratingForUser).toList();      
+        //Fetching rating details from feign client
+        List<Rating> ratings=ratingService.getRating(user.getUserId());
             
         //iterating each list and calling hotel service and adding in each user rating
         List<Rating> ratingList=ratings.stream().map(rating->{        	
 	    	//Hotel API call from rating 
-//	    	String hotelUrl="http://HOTEL-SERVICE/hotels/"+rating.getHotelId();
-//	    	ResponseEntity<Hotel> hotelForUser=restTemplate.getForEntity(hotelUrl, Hotel.class);
-//	    	Hotel hotel=hotelForUser.getBody();
-//	    	logger.info("response status code: {}"+hotelForUser.getStatusCodeValue());
-        	
         	Hotel hotel=hotelService.getHotel(rating.getHotelId());
         	
         	//set the hotel to rating
@@ -84,8 +81,6 @@ public class UserServiceImpl implements UserService {
         	//return rating with hotel details
         	return rating;
         }).collect(Collectors.toList());
-        
-        
         
         user.setRatings(ratingList);
         
