@@ -4,6 +4,7 @@ import com.microservicedemo.user.service.entities.Hotel;
 import com.microservicedemo.user.service.entities.Rating;
 import com.microservicedemo.user.service.entities.User;
 import com.microservicedemo.user.service.exceptions.ResourceNotFoundException;
+import com.microservicedemo.user.service.external.services.HotelService;
 import com.microservicedemo.user.service.repositories.UserRepository;
 import com.microservicedemo.user.service.services.UserService;
 
@@ -29,6 +30,9 @@ public class UserServiceImpl implements UserService {
     
     @Autowired
     private RestTemplate restTemplate;
+    
+    @Autowired
+    private HotelService hotelService;
     
     
     //It will trackthe log in console
@@ -67,10 +71,12 @@ public class UserServiceImpl implements UserService {
         //iterating each list and calling hotel service and adding in each user rating
         List<Rating> ratingList=ratings.stream().map(rating->{        	
 	    	//Hotel API call from rating 
-	    	String hotelUrl="http://HOTEL-SERVICE/hotels/"+rating.getHotelId();
-	    	ResponseEntity<Hotel> hotelForUser=restTemplate.getForEntity(hotelUrl, Hotel.class);
-	    	Hotel hotel=hotelForUser.getBody();
-	    	logger.info("response status code: {}"+hotelForUser.getStatusCodeValue());
+//	    	String hotelUrl="http://HOTEL-SERVICE/hotels/"+rating.getHotelId();
+//	    	ResponseEntity<Hotel> hotelForUser=restTemplate.getForEntity(hotelUrl, Hotel.class);
+//	    	Hotel hotel=hotelForUser.getBody();
+//	    	logger.info("response status code: {}"+hotelForUser.getStatusCodeValue());
+        	
+        	Hotel hotel=hotelService.getHotel(rating.getHotelId());
         	
         	//set the hotel to rating
         	rating.setHotel(hotel);
