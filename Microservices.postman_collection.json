@@ -1,0 +1,268 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Microservices",
+		"_postman_id": "5fb3b3c6-0796-5226-6799-ab0540f62c8b",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "UserService",
+			"description": "This is service collection",
+			"item": [
+				{
+					"name": "save user",
+					"request": {
+						"url": "localhost:8081/users",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "   {\r\n        \t\"name\":\"Pinki Singh\",\r\n            \"email\":\"pink1542@gmail.com\",\r\n            \"about\":\"I am  an enterprenior\"\r\n    }"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "get All user",
+					"request": {
+						"url": "localhost:8081/users",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "getUserById",
+					"request": {
+						"url": "localhost:8081/users/ae785fb1-e0a9-4aca-95b0-07b4ee9b3caf",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"url": "localhost:8081/users/update/93488a73-3d3b-4951-a892-685d96304f69",
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\":\"Rakesh Sharma\",\r\n    \"email\":\"rakesh@gmail.com\",\r\n    \"about\":\"He is full stack developer and intelligent\"\r\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "delete",
+					"request": {
+						"url": "localhost:8081/users/delete/edd5cebd-7bba-4c02-bccb-6cb3007a8",
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "HotelService",
+			"description": "This is API Call for Hotel Service",
+			"item": [
+				{
+					"name": "Create hotel",
+					"request": {
+						"url": "localhost:8082/hotels",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Tara Sweets\",\n\t\"location\": \"Palamu Jharkhand\",\n\t\"about\":\" You will get Vegeterian food, sweets and best quality accomadation\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "fetch hotel by Id",
+					"request": {
+						"url": "localhost:8082/hotels/8a15f596-af25-4681-867a-88dab3092be7",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "fetch All Hotels",
+					"request": {
+						"url": "localhost:8082/hotels",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "RatingService",
+			"description": "This Rating Service data will be stored in mongoDB",
+			"item": [
+				{
+					"name": "create Rating",
+					"request": {
+						"url": "localhost:8083/ratings",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"rating\": 3,\n\t\"feedback\": \"you are too lazy\",\n\t\"hotelId\":\"8a15f596-af25-4681-867a-88dab3092be7\",\n\t\"userId\":\"93488a73-3d3b-4951-a892-685d96304f69\"\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "fetch All Rating",
+					"request": {
+						"url": "localhost:8083/ratings",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "fetchAllRating By UserId",
+					"request": {
+						"url": "localhost:8083/ratings/user/93488a73-3d3b-4951-a892-685d96304f69",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "Fetch All Rating By Hotel Id",
+					"request": {
+						"url": "localhost:8083/ratings/hotel/8a15f596-af25-4681-867a-88dab3092be7",
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "API Gateway",
+			"description": "THis is entry point of allother microservices- uerservice, ratingservice, hotelservice",
+			"item": [
+				{
+					"name": "User",
+					"description": "",
+					"item": [
+						{
+							"name": "getUser",
+							"request": {
+								"url": "localhost:8084/users",
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"description": ""
+							},
+							"response": []
+						},
+						{
+							"name": "getuserById",
+							"request": {
+								"url": "localhost:8084/users/91249e68-c514-4f1a-a468-542f6dab83dd",
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Hotel",
+					"description": "",
+					"item": [
+						{
+							"name": "getHotels",
+							"request": {
+								"url": "localhost:8084/hotels",
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Rating",
+					"description": "",
+					"item": [
+						{
+							"name": "getRating",
+							"request": {
+								"url": "localhost:8084/ratings",
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"description": ""
+							},
+							"response": []
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			]
+		}
+	]
+}

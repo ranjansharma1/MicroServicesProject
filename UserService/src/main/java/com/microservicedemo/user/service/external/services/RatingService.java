@@ -15,19 +15,19 @@ import com.microservicedemo.user.service.entities.Rating;
 @FeignClient(name = "RATING-SERVICE")
 public interface RatingService {
 
-	@GetMapping("/rating/user/{userId}")
+	@GetMapping("/ratings/user/{userId}")
 	public List<Rating> getRating(@PathVariable("userId") String Id);
 	
 	// we can use these when we need, as of now we don't need in this project
 	
-	@PostMapping("/rating")
+	@PostMapping("/ratings")
 	public Rating createRating(Rating values);
 	
-	@PutMapping("/rating/{ratingId}")
+	@PutMapping("/ratings/{ratingId}")
 	public Rating updateRating(@PathVariable String ratingId, Rating rating);
 	
 	
-	@DeleteMapping("/rating/{ratingId}")
+	@DeleteMapping("/ratings/{ratingId}")
 	public void deleteRating(@PathVariable String ratingId);
 	
 

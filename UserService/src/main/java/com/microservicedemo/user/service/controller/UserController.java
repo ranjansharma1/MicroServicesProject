@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
     @Autowired
     UserService userService;
 
-   /* POST:localhost:8081/user
+   /* POST:localhost:8081/users
    {
         "name":"Ranjan Sharma",
             "email":"ran@gmail.com",
@@ -29,14 +29,14 @@ public class UserController {
     }
 
 
-    //    Get: localhost:8081/user
+    //    Get: localhost:8081/users
     @GetMapping()
     public  ResponseEntity<List<User>> fetchAllUser(){
         List<User> users=userService.getAllUser();
         return  ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
-//    Get: localhost:8081/user/93488a73-3d3b-4951-a892-685d96304f69
+//    Get: localhost:8081/users/93488a73-3d3b-4951-a892-685d96304f69
     @GetMapping("/{userId}")
     public ResponseEntity<User> getUserbyId(@PathVariable String userId){
         User user=userService.getUserById(userId);
