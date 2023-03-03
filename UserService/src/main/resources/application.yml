@@ -1,8 +1,10 @@
 server:
   port: 8081
 
-
 spring:
+  application:
+    name: USER-SERVICE
+
   datasource:
     url: jdbc:mysql://localhost:3306/microservices?createDatabaseIfNotExist=true
     username: root
@@ -12,20 +14,20 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    show-sql: true
-    
-  application:
-    name: User-Service
-    
+    show-sql: true  
+     
+  config:
+    import: optional:configserver:http://localhost:8085 
   
     
     
-    
-eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    fetch-registry: true
-    register-with-eureka: true
-    service-url:
-      defaultZone: http://localhost:8761/eureka
+#This is not needed now, beacause, we are using config.import to externalise properties to github
+  
+#eureka:
+#  instance:
+#    prefer-ip-address: true
+#  client:
+#    fetch-registry: true
+#    register-with-eureka: true
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka

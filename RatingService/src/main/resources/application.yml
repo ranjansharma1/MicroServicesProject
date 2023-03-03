@@ -3,12 +3,21 @@
 spring:
   application:
     name: Rating-Service  
+  config:
+    import: optional:configserver:http://localhost:8085
+    
+#   It is used when, we need to externalize properties to dev- spring.profile.active: dev
+ 
+  profiles:
+    active: prod
+  
+#This is not needed now, beacause, we are using config.import to externalise properties to github  
           
-eureka:
-  instance:
-    prefer-ip-address: true
-  client:
-    fetch-registry: true
-    register-with-eureka: true
-    service-url:
-      defaultZone: http://localhost:8761/eureka
+#eureka:
+#  instance:
+#    prefer-ip-address: true
+#  client:
+#    fetch-registry: true
+#    register-with-eureka: true
+#    service-url:
+#      defaultZone: http://localhost:8761/eureka
