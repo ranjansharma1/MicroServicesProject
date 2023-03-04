@@ -3,6 +3,11 @@ package com.microservicedemo.user.service.controller;
 
 import com.microservicedemo.user.service.entities.User;
 import com.microservicedemo.user.service.services.UserService;
+
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +18,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+	
+	private Logger  logger= LoggerFactory.getLogger(UserController.class);
     @Autowired
     UserService userService;
 
@@ -38,14 +45,29 @@ public class UserController {
 
 //    Get: localhost:8081/users/93488a73-3d3b-4951-a892-685d96304f69
     @GetMapping("/{userId}")
+    @CircuitBreaker(name = "ratingHotelBreaker", fallbackMethod = "ratingHotelFallback")
     public ResponseEntity<User> getUserbyId(@PathVariable String userId){
+    	logger.info("Calling getUerById method");
         User user=userService.getUserById(userId);
         return ResponseEntity.status(HttpStatus.OK).body(user);
-        
-        
-        
-//        return new ResponseEntity<>(user,HttpStatus.OK);
     }
+    
+    
+    //Creating Fallback method to handle circuit breaker
+    
+    public ResponseEntity<User> ratingHotelFallback(String userId, Exception ex){
+    	logger.info("Fallback is executed because server is down: ", ex.getMessage());
+    	User user= User.builder()
+    					.userId("12345")
+    					.name("dummy")
+    					.email("dummy@gmail.com")
+    					.about("Service is down, dummy user created")
+    					.ratings(null)
+    					.build();
+    	
+    	return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+    
 
     /*PUT: localhost:8081/user/update/93488a73-3d3b-4951-a892-685d96304f69
     {
