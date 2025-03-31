@@ -1,8 +1,12 @@
 package com.microservicedemo.user.service.entities;
 
-import lombok.Data;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Rating {
     private String ratingId;
     private String userId;
@@ -12,3 +16,4 @@ public class Rating {
 
 
 }
+
