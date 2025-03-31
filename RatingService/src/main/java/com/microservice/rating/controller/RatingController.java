@@ -16,7 +16,7 @@ import com.microservice.rating.entities.Rating;
 import com.microservice.rating.services.RatingService;
 
 @RestController
-@RequestMapping("/rating")
+@RequestMapping("/ratings")
 public class RatingController {
 	@Autowired
 	private RatingService ratingService;
